@@ -57,7 +57,7 @@ export default class App extends Component<Props> {
             </Right>
           </ListItem>
           <Button block style ={styles.button}>
-            <Text style={styles.buttonText}>PAY</Text>
+            <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('Fourth')}>PAY</Text>
           </Button>
         </Content>
       </Container>

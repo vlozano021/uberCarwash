@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "987310133997",
+    "firebase_url": "https://ubercarwash-d057d.firebaseio.com",
+    "project_id": "ubercarwash-d057d",
+    "storage_bucket": "ubercarwash-d057d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987310133997:android:15600b185207754f",
+        "android_client_info": {
+          "package_name": "com.ubercarwash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCma32u6859Kqr1PZgbOLWR3qr_zFD6k64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987310133997-v68a8lvd0ahvcr0e7652ngak3er11lhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
