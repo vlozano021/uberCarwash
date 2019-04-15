@@ -13,7 +13,7 @@ const OTHER = "other";
 type Props = {};
 export default class App extends Component<Props> {
   static navigationOptions = {
-  title: 'Payment Info',
+  title: 'Confirmation',
   headerStyle: {
     backgroundColor: '#5699FF',
   },
@@ -31,10 +31,10 @@ export default class App extends Component<Props> {
     return (
       <Container style={styles.container}>
         <Content>
-          <Text style={styles.availableServices}>Choose Payment Method:</Text>
+          <Text style={styles.availableServices}>Thank you for choosing us! We will contact you shortly!</Text>
           <ListItem onPress={() => this.setState({serviceType:ON_SITE})}>
             <Left>
-              <Text style={styles.listText}>Pay on site</Text>
+              <Text style={styles.listText}>Contact by Phone</Text>
             </Left>
             <Right>
               <Radio selected={this.state.serviceType === ON_SITE}/>
@@ -42,7 +42,7 @@ export default class App extends Component<Props> {
           </ListItem>
           <ListItem onPress={() => this.setState({serviceType:MOBILE})}>
             <Left>
-              <Text style={styles.listText}>Pay via mobile</Text>
+              <Text style={styles.listText}>Contact by E-mail</Text>
             </Left>
             <Right>
               <Radio selected={this.state.serviceType === MOBILE} />
@@ -50,14 +50,18 @@ export default class App extends Component<Props> {
           </ListItem>
           <ListItem onPress={() => this.setState({serviceType:OTHER})}>
             <Left>
-              <Text style={styles.listText}>Other Payment Method</Text>
+              <Text style={styles.listText}>Other form of contact</Text>
             </Left>
             <Right>
               <Radio selected={this.state.serviceType === OTHER} />
             </Right>
           </ListItem>
-          <Button block style ={styles.button} onPress={() => this.props.navigation.navigate('Fifth')}>
-            <Text style={styles.buttonText}>PAY</Text>
+          <Text style={styles.availableServices}>Contact:</Text>
+          <Item regular style={styles.textbox}>
+            <Input placeholder='Enter contact here'/>
+          </Item>
+          <Button block style ={styles.button}>
+            <Text style={styles.buttonText}>Done!</Text>
           </Button>
         </Content>
       </Container>

@@ -1,118 +1,87 @@
-import React, {Component} from 'react';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ * @lint-ignore-every XPLATJSCOPYRIGHT1
+ */
 
-import {
-  Container, Header, Content, Button, Form, Input, Item, Icon, List, ListItem, Left, Right, Radio, Card, CardItem, Body
-} from 'native-base';
+ import React, {Component} from 'react';
+ import { Container, Header, Content, Button, Form, Input, Item, Icon } from 'native-base';
+ import {Platform, StyleSheet, Text, View} from 'react-native';
+ import firebase from 'react-native-firebase';
 
-import {Platform, StyleSheet, Text, View} from 'react-native';
+ type Props = {};
+ export default class App extends Component<Props> {
+   static navigationOptions = {
+     title: 'CarWash',
+     headerStyle: {
+       backgroundColor: '#003399',
+     },
+     headerTintColor: 'white'
+   };
 
-const STANDARD = "standard";
-const PREMIUM = "premium";
-const DELUXE = "deluxe";
-const VIP = "vip";
+     state = {
+       location: ''
+     };
 
-type Props = {};
-export default class App extends Component<Props> {
-  static navigationOptions = {
-  title: 'Car Wash',
-  headerStyle: {
-    backgroundColor: '#5699FF',
-  },
-  headerTintColor: 'white',
-  };
+     this.ref = firebase.firestore().collection('jobs');
 
-  state = {
-    location: '',
-    serviceType: STANDARD
-  };
-  onLocationChange = (location) => {
-    this.setState({location: location});
-  }
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Content>
-          <Text style={styles.availableServices}>Available Services</Text>
-          <ListItem onPress={() => this.setState({serviceType:STANDARD})}>
-            <Left>
-              <Text style={styles.listText}>$___ Standard</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === STANDARD}/>
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:PREMIUM})}>
-            <Left>
-              <Text style={styles.listText}>$___ Premium</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === PREMIUM} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:DELUXE})}>
-            <Left>
-              <Text style={styles.listText}>$___ Deluxe</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === DELUXE} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:VIP})}>
-            <Left>
-              <Text style={styles.listText}>$___ VIP</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === VIP} />
-            </Right>
-          </ListItem>
-          <Card style={styles.card}>
-            <CardItem>
-              <Body>
-                <Text style={styles.tabText}>TOTAL: $___</Text>
-              </Body>
-            </CardItem>
-          </Card>
-          <Button block style ={styles.button} onPress={() => this.props.navigation.navigate('Second')}>
-            <Text style={styles.buttonText}>Set Up Appointment</Text>
-          </Button>
-        </Content>
-      </Container>
-    );
-  }
-}
+     onLocationChange = (location) => {
+       this.setState({ location: location });
+     }
+
+     render() {
+      return (
+        <Container>
+          <Content contentContainerStyle={styles.content}>
+            <Item regular style={styles.searchBar}>
+              <Icon active name='search' />
+              <Input
+                value={this.state.location}
+                placeholder='What database are you looking for today?'
+                onChangeText={this.onLocationChange}
+              />
+            </Item>
+
+
+           <View style={styles.buttonContainer}>
+             <Button bordered dark style={styles.dateButton} onPress={() => this.ref.add({
+                title: "HELLO WORLD",
+                complete: false,
+              })}>
+               <Text>Available Services</Text>
+             </Button>
+
+             <Button bordered dark style={styles.dateButton}
+             onPress={() => this.props.navigation.navigate('Second')}>
+               <Text>Set Up Appointment</Text>
+             </Button>
+           </View>
+         </Content>
+       </Container>
+     );
+   }
+ }
 
 const styles = StyleSheet.create({
-  availableServices: {
-    fontSize: 25,
-    color: 'white',
-    marginTop: '5%',
-    textAlign: 'center'
-    },
-  card: {
-    width: '50%',
-    alignSelf: 'flex-end',
-    marginRight: '2%'
-    },
-  container: {
-    backgroundColor: '#5699FF',
+  buttonContainer: {
+    flexDirection: "row"
   },
-  button: {
-    marginTop:'5%',
-    backgroundColor:'white',
-    alignSelf: 'center',
-    width: '60%',
+  content: {
+    marginLeft: '5%'
   },
-  listText: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center'
+  dateButton: {
+    padding: 15,
+    marginRight: 10,
   },
-  tabText: {
-    fontSize: 18
-    },
-  buttonText: {
-    alignSelf: 'center',
-    color: 'black',
-    fontSize: 14,
-  },
+  searchBar: {
+    marginTop: 20,
+    marginBottom: 20,
+    width: '95%',
+    elevation: 5,
+    backgroundColor: 'white',
+    borderRadius: 3,
+  }
 });
