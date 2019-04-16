@@ -27,8 +27,36 @@ export default class App extends Component<Props> {
     serviceType: STANDARD
   };
 
+  price = () => {
+    if(this.state.serviceType === "standard") {
+      return (
+        <Text style={styles.tabText}>TOTAL: $15.00</Text>
+      );
+    }
+    else if(this.state.serviceType === "premium") {
+      return (
+        <Text style={styles.tabText}>TOTAL: $20.00</Text>
+      );
+    }
+    else if(this.state.serviceType === "deluxe") {
+      return (
+        <Text style={styles.tabText}>TOTAL: $25.00</Text>
+      );
+    }
+    else if(this.state.serviceType === "vip") {
+      return (
+        <Text style={styles.tabText}>TOTAL: $30.00</Text>
+      );
+    }
+    else {
+      return (
+        <Text style={styles.tabText}>NULL</Text>
+      );
+    }
+  };
+
   setupAppointment = () => {
-     const ref = firebase.firestore().collection('appointment');
+     const ref = firebase.firestore().collection('appointments');
      const name = this.props.navigation.getParam('name', null);
      const location = this.props.navigation.getParam('location', null);
      const phone_number = this.props.navigation.getParam('phone_number', null);
@@ -50,7 +78,6 @@ export default class App extends Component<Props> {
         serviceType: this.state.serviceType
       }).then(() => this.props.navigation.navigate('Fourth'));
   }
-
 
   render() {
     return (
@@ -92,7 +119,7 @@ export default class App extends Component<Props> {
           <Card style={styles.card}>
             <CardItem>
               <Body>
-                <Text style={styles.tabText}>TOTAL: $___</Text>
+                {this.price()}
               </Body>
             </CardItem>
           </Card>
