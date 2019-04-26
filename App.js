@@ -20,7 +20,9 @@ state={
   year:'',
   make:'',
   model:'',
-  plate_number:''
+  plate_number:'',
+  date:'',
+  time:''
 };
 
  render() {
@@ -54,6 +56,12 @@ state={
            <Input value={this.state.plate_number} onChangeText={(text) => this.setState({plate_number:text})} placeholder='Plate #:'/>
          </Item>
          <Text style={styles.availableServices}>Date and Time:</Text>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.date} onChangeText={(text) => this.setState({date:text})} placeholder='Date: mm/dd/yyyy'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.time} onChangeText={(text) => this.setState({time:text})} placeholder='Time: Standard time'/>
+         </Item>
          <Button block style ={styles.button} onPress={() => this.props.navigation.navigate('Second', {
              name: this.state.name,
              location: this.state.location,
@@ -62,7 +70,9 @@ state={
              year: this.state.year,
              make: this.state.make,
              model: this.state.model,
-             plate_number: this.state.plate_number
+             plate_number: this.state.plate_number,
+             date: this.state.date,
+             time: this.state.time
            })}>
            <Text style={styles.buttonText}>Select Service</Text>
          </Button>

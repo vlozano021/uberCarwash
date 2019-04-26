@@ -3,10 +3,14 @@ import React, {Component} from 'react';
 import {
   Container, Header, Content, Button, Form, Input, Item, Icon, List, ListItem, Left, Right, Radio, Card, CardItem, Body
 } from 'native-base';
-
 import {Platform, StyleSheet, Text, View} from 'react-native';
-
 import firebase from 'react-native-firebase';
+import stripe from 'tipsi-stripe'
+
+stripe.setOptions({
+  publishableKey: 'pk_test_K5pZcjk0TdV5FndXD4DVt7wA00mvCaBVGx',
+  androidPayMode: 'test',
+});
 
 const STANDARD = "standard";
 const PREMIUM = "premium";
@@ -65,6 +69,8 @@ export default class App extends Component<Props> {
      const make = this.props.navigation.getParam('make', null);
      const model = this.props.navigation.getParam('model', null);
      const plate_number = this.props.navigation.getParam('plate_number', null);
+     const date = this.props.navigation.getParam('date', null);
+     const time = this.props.navigation.getParam('time', null);
 
      ref.add({
         name: name,
@@ -75,8 +81,27 @@ export default class App extends Component<Props> {
         make: make,
         model: model,
         plate_number: plate_number,
+        date: date,
+        time: time,
         serviceType: this.state.serviceType
       }).then(() => this.props.navigation.navigate('Fourth'));
+  }
+
+  pay() {
+    stripe.paymentRequestWithNativePay({
+        total_price: '50.00',
+        currency_code: 'USD',
+        shipping_address_required: true,
+        phone_number_required: true,
+        shipping_countries: ['US', 'CA'],
+        line_items: [{
+          currency_code: 'USD',
+          description: 'Tipsi',
+          total_price: '20.00',
+          unit_price: '20.00',
+          quantity: '1',
+        }],
+      }).then((response) => console.log(response));
   }
 
   render() {
@@ -123,7 +148,7 @@ export default class App extends Component<Props> {
               </Body>
             </CardItem>
           </Card>
-          <Button block style={styles.button} onPress={() => this.setupAppointment()}>
+          <Button block style={styles.button} onPress={() => this.pay()}>
             <Text style={styles.buttonText}>Pay</Text>
           </Button>
         </Content>
