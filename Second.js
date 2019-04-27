@@ -60,18 +60,6 @@ export default class App extends Component<Props> {
   };
 
   setupAppointment = () => {
-     const ref = firebase.firestore().collection('appointments');
-     const name = this.props.navigation.getParam('name', null);
-     const location = this.props.navigation.getParam('location', null);
-     const phone_number = this.props.navigation.getParam('phone_number', null);
-     const email = this.props.navigation.getParam('email', null);
-     const year = this.props.navigation.getParam('year', null);
-     const make = this.props.navigation.getParam('make', null);
-     const model = this.props.navigation.getParam('model', null);
-     const plate_number = this.props.navigation.getParam('plate_number', null);
-     const date = this.props.navigation.getParam('date', null);
-     const time = this.props.navigation.getParam('time', null);
-
      ref.add({
         name: name,
         location: location,
@@ -88,6 +76,17 @@ export default class App extends Component<Props> {
   }
 
   pay() {
+    const ref = firebase.firestore().collection('appointments');
+    const name = this.props.navigation.getParam('name', null);
+    const location = this.props.navigation.getParam('location', null);
+    const phone_number = this.props.navigation.getParam('phone_number', null);
+    const email = this.props.navigation.getParam('email', null);
+    const year = this.props.navigation.getParam('year', null);
+    const make = this.props.navigation.getParam('make', null);
+    const model = this.props.navigation.getParam('model', null);
+    const plate_number = this.props.navigation.getParam('plate_number', null);
+    const date = this.props.navigation.getParam('date', null);
+    const time = this.props.navigation.getParam('time', null);
     stripe.paymentRequestWithNativePay({
         total_price: '50.00',
         currency_code: 'USD',
@@ -101,7 +100,21 @@ export default class App extends Component<Props> {
           unit_price: '20.00',
           quantity: '1',
         }],
-      }).then((response) => console.log(response));
+      }).then((response) => console.log(response)).then(() => {
+         ref.add({
+            name: name,
+            location: location,
+            phone_number: phone_number,
+            email: email,
+            year: year,
+            make: make,
+            model: model,
+            plate_number: plate_number,
+            date: date,
+            time: time,
+            serviceType: this.state.serviceType
+          }).then(() => this.props.navigation.navigate('Fourth'));
+      });
   }
 
   render() {
