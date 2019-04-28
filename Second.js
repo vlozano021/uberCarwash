@@ -59,21 +59,33 @@ export default class App extends Component<Props> {
     }
   };
 
-  setupAppointment = () => {
-     ref.add({
-        name: name,
-        location: location,
-        phone_number: phone_number,
-        email: email,
-        year: year,
-        make: make,
-        model: model,
-        plate_number: plate_number,
-        date: date,
-        time: time,
-        serviceType: this.state.serviceType
-      }).then(() => this.props.navigation.navigate('Fourth'));
-  }
+  total = () => {
+    if(this.state.serviceType === "standard") {
+      return (
+        '15.00'
+      );
+    }
+    else if(this.state.serviceType === "premium") {
+      return (
+        '20.00'
+      );
+    }
+    else if(this.state.serviceType === "deluxe") {
+      return (
+        '25.00'
+      );
+    }
+    else if(this.state.serviceType === "vip") {
+      return (
+        '30.00'
+      );
+    }
+    else {
+      return (
+        '00.00'
+      );
+    }
+  };
 
   pay() {
     const ref = firebase.firestore().collection('appointments');
@@ -87,17 +99,19 @@ export default class App extends Component<Props> {
     const plate_number = this.props.navigation.getParam('plate_number', null);
     const date = this.props.navigation.getParam('date', null);
     const time = this.props.navigation.getParam('time', null);
+    const total = this.total();
+
     stripe.paymentRequestWithNativePay({
-        total_price: '50.00',
+        total_price: total,
         currency_code: 'USD',
         shipping_address_required: true,
         phone_number_required: true,
         shipping_countries: ['US', 'CA'],
         line_items: [{
           currency_code: 'USD',
-          description: 'Tipsi',
-          total_price: '20.00',
-          unit_price: '20.00',
+          description: this.state.serviceType,
+          total_price: total,
+          unit_price: total,
           quantity: '1',
         }],
       }).then((response) => console.log(response)).then(() => {
