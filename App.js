@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
 import {
-  Container, Header, Content, Button, Form, Input, Item, Icon, List, ListItem, Left, Right, Radio,
+  Container, Header, Content, Button, Form, Input, Item, Icon, List, ListItem, Left, Right, Radio
 } from 'native-base';
 
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, Image} from 'react-native';
 
 const ON_SITE = "on_site";
 const MOBILE = "mobile";
@@ -31,7 +31,13 @@ export default class App extends Component<Props> {
     return (
       <Container style={styles.container}>
         <Content>
-          <Text style={styles.availableServices}>Welcome</Text>
+          <Text style={styles.availableServices}>Welcome!</Text>
+          <View>
+            <Image
+              style={styles.images_style}
+              source={require('/reactnative/uberCarwash/images/carwash.jpg')}
+            />
+          </View>
           <Text style={styles.listText}>Our app lets you set an appointment with us to give your car a wash.</Text>
           <Text style={styles.listText}>What's unique with our service?</Text>
           <Text style={styles.listText}>We will bring your car to a car wash location and get it washed for you!</Text>
@@ -78,4 +84,9 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
   },
+  images_style: {
+    width: 400,
+    height: 300,
+    alignSelf: 'center'
+  }
 });
