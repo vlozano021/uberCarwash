@@ -1,221 +1,116 @@
 import React, {Component} from 'react';
-
-import {
-  Container, Header, Content, Button, Form, Input, Item, Icon, List, ListItem, Left, Right, Radio, Card, CardItem, Body
-} from 'native-base';
+import { Container, Header, Content, Button, Form, Input, Item, List, ListItem, Radio } from 'native-base';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import firebase from 'react-native-firebase';
-import stripe from 'tipsi-stripe'
-
-stripe.setOptions({
-  publishableKey: 'pk_test_K5pZcjk0TdV5FndXD4DVt7wA00mvCaBVGx',
-  androidPayMode: 'test',
-});
-
-const STANDARD = "standard";
-const PREMIUM = "premium";
-const DELUXE = "deluxe";
-const VIP = "vip";
 
 type Props = {};
 export default class App extends Component<Props> {
-  static navigationOptions = {
-  title: 'Car Wash',
-  headerStyle: {
-    backgroundColor: '#5699FF',
-  },
-  headerTintColor: 'white',
-  };
+ static navigationOptions = {
+ title: 'Set Up Appointment',
+ headerStyle: {
+   backgroundColor: '#5699FF',
+ },
+ headerTintColor: 'white',
+};
 
-  state = {
-    serviceType: STANDARD
-  };
+state={
+  name:'',
+  location:'',
+  phone_number:'',
+  email:'',
+  year:'',
+  make:'',
+  model:'',
+  plate_number:'',
+  date:'',
+  time:''
+};
 
-  price = () => {
-    if(this.state.serviceType === "standard") {
-      return (
-        <Text style={styles.tabText}>TOTAL: $15.00</Text>
-      );
-    }
-    else if(this.state.serviceType === "premium") {
-      return (
-        <Text style={styles.tabText}>TOTAL: $20.00</Text>
-      );
-    }
-    else if(this.state.serviceType === "deluxe") {
-      return (
-        <Text style={styles.tabText}>TOTAL: $25.00</Text>
-      );
-    }
-    else if(this.state.serviceType === "vip") {
-      return (
-        <Text style={styles.tabText}>TOTAL: $30.00</Text>
-      );
-    }
-    else {
-      return (
-        <Text style={styles.tabText}>NULL</Text>
-      );
-    }
-  };
-
-  total = () => {
-    if(this.state.serviceType === "standard") {
-      return (
-        '15.00'
-      );
-    }
-    else if(this.state.serviceType === "premium") {
-      return (
-        '20.00'
-      );
-    }
-    else if(this.state.serviceType === "deluxe") {
-      return (
-        '25.00'
-      );
-    }
-    else if(this.state.serviceType === "vip") {
-      return (
-        '30.00'
-      );
-    }
-    else {
-      return (
-        '00.00'
-      );
-    }
-  };
-
-  pay() {
-    const ref = firebase.firestore().collection('appointments');
-    const name = this.props.navigation.getParam('name', null);
-    const location = this.props.navigation.getParam('location', null);
-    const phone_number = this.props.navigation.getParam('phone_number', null);
-    const email = this.props.navigation.getParam('email', null);
-    const year = this.props.navigation.getParam('year', null);
-    const make = this.props.navigation.getParam('make', null);
-    const model = this.props.navigation.getParam('model', null);
-    const plate_number = this.props.navigation.getParam('plate_number', null);
-    const date = this.props.navigation.getParam('date', null);
-    const time = this.props.navigation.getParam('time', null);
-    const total = this.total();
-
-    stripe.paymentRequestWithNativePay({
-        total_price: total,
-        currency_code: 'USD',
-        shipping_address_required: true,
-        phone_number_required: true,
-        shipping_countries: ['US', 'CA'],
-        line_items: [{
-          currency_code: 'USD',
-          description: this.state.serviceType,
-          total_price: total,
-          unit_price: total,
-          quantity: '1',
-        }],
-      }).then((response) => console.log(response)).then(() => {
-         ref.add({
-            name: name,
-            location: location,
-            phone_number: phone_number,
-            email: email,
-            year: year,
-            make: make,
-            model: model,
-            plate_number: plate_number,
-            date: date,
-            time: time,
-            serviceType: this.state.serviceType
-          }).then(() => this.props.navigation.navigate('Fourth'));
-      });
-  }
-
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Content>
-          <Text style={styles.availableServices}>Available Services</Text>
-          <ListItem onPress={() => this.setState({serviceType:STANDARD})}>
-            <Left>
-              <Text style={styles.listText}>Standard</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === STANDARD}/>
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:PREMIUM})}>
-            <Left>
-              <Text style={styles.listText}>Premium</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === PREMIUM} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:DELUXE})}>
-            <Left>
-              <Text style={styles.listText}>Deluxe</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === DELUXE} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:VIP})}>
-            <Left>
-              <Text style={styles.listText}>VIP</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === VIP} />
-            </Right>
-          </ListItem>
-          <Card style={styles.card}>
-            <CardItem>
-              <Body>
-                {this.price()}
-              </Body>
-            </CardItem>
-          </Card>
-          <Button block style={styles.button} onPress={() => this.pay()}>
-            <Text style={styles.buttonText}>Pay</Text>
-          </Button>
-        </Content>
-      </Container>
-    );
-  }
+ render() {
+   return (
+     <Container style={styles.container}>
+       <Content>
+         <Text style={styles.availableServices}>Personal Info:</Text>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.name} onChangeText={(text) => this.setState({name:text})} placeholder='Name:'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.location} onChangeText={(text) => this.setState({location:text})} placeholder='Location:'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.phone_number} onChangeText={(text) => this.setState({phone_number:text})} placeholder='Phone Number:'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.email} onChangeText={(text) => this.setState({email:text})} placeholder='Email Address:'/>
+         </Item>
+         <Text style={styles.availableServices}>Vehicle Info:</Text>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.year} onChangeText={(text) => this.setState({year:text})} placeholder='Year:'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.make} onChangeText={(text) => this.setState({make:text})} placeholder='Make:'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.model} onChangeText={(text) => this.setState({model:text})} placeholder='Model:'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.plate_number} onChangeText={(text) => this.setState({plate_number:text})} placeholder='Plate #:'/>
+         </Item>
+         <Text style={styles.availableServices}>Date and Time:</Text>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.date} onChangeText={(text) => this.setState({date:text})} placeholder='Date: mm/dd/yyyy'/>
+         </Item>
+         <Item regular style={styles.textbox}>
+           <Input value={this.state.time} onChangeText={(text) => this.setState({time:text})} placeholder='Time: Standard time'/>
+         </Item>
+         <Button block style ={styles.button} onPress={() => this.props.navigation.navigate('Third', {
+             name: this.state.name,
+             location: this.state.location,
+             phone_number: this.state.phone_number,
+             email: this.state.email,
+             year: this.state.year,
+             make: this.state.make,
+             model: this.state.model,
+             plate_number: this.state.plate_number,
+             date: this.state.date,
+             time: this.state.time
+           })}>
+           <Text style={styles.buttonText}>Select Service</Text>
+         </Button>
+       </Content>
+     </Container>
+   );
+ }
 }
 
 const styles = StyleSheet.create({
-  availableServices: {
-    fontSize: 25,
-    color: 'white',
-    marginTop: '5%',
-    textAlign: 'center'
-    },
-  card: {
-    width: '50%',
-    alignSelf: 'flex-end',
-    marginRight: '2%'
-    },
-  container: {
-    backgroundColor: '#5699FF',
-  },
-  button: {
-    marginTop:'5%',
-    backgroundColor:'white',
-    alignSelf: 'center',
-    width: '60%',
-  },
-  listText: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center'
-  },
-  tabText: {
-    fontSize: 18
-    },
-  buttonText: {
-    alignSelf: 'center',
-    color: 'black',
-    fontSize: 14,
-  },
+ availableServices: {
+   marginLeft: '5%',
+   fontSize: 18,
+   color: 'white',
+   marginTop: '2%'
+   },
+ container: {
+   backgroundColor: '#5699FF',
+ },
+ button: {
+   marginTop: '8%',
+   backgroundColor:'white',
+   alignSelf: 'center',
+   width: '60%',
+ },
+ listText: {
+   color: 'white',
+   fontSize: 14
+ },
+ buttonText: {
+   marginTop: '6%',
+   color: 'black',
+   fontSize: 14,
+ },
+ textbox: {
+   marginTop: '2%',
+   backgroundColor:'white',
+   alignSelf: 'center',
+   width: '94%',
+ }
 });

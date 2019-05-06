@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {
   Container, Header, Content, Button, Form, Input, Item, Icon, List, ListItem, Left, Right, Radio,
 } from 'native-base';
-
+import { NavigationActions } from 'react-navigation';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
 const ON_SITE = "on_site";
@@ -32,36 +32,9 @@ export default class App extends Component<Props> {
       <Container style={styles.container}>
         <Content>
           <Text style={styles.availableServices}>Thank you for choosing us! We will contact you shortly!</Text>
-          <ListItem onPress={() => this.setState({serviceType:ON_SITE})}>
-            <Left>
-              <Text style={styles.listText}>Contact by Phone</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === ON_SITE}/>
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:MOBILE})}>
-            <Left>
-              <Text style={styles.listText}>Contact by E-mail</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === MOBILE} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.setState({serviceType:OTHER})}>
-            <Left>
-              <Text style={styles.listText}>Other form of contact</Text>
-            </Left>
-            <Right>
-              <Radio selected={this.state.serviceType === OTHER} />
-            </Right>
-          </ListItem>
-          <Text style={styles.availableServices}>Contact:</Text>
-          <Item regular style={styles.textbox}>
-            <Input placeholder='Enter contact here'/>
-          </Item>
-          <Button block style ={styles.button}>
-            <Text style={styles.buttonText}>Done!</Text>
+          <Button block style ={styles.button} onPress={() => this.props.navigation.reset([NavigationActions.navigate({ routeName: 'Second' })], 0)
+}>
+            <Text style={styles.buttonText}>Set another appointment</Text>
           </Button>
         </Content>
       </Container>
